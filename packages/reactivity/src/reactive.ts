@@ -56,6 +56,7 @@ function targetTypeMap(rawType: string) {
 }
 
 function getTargetType(value: Target) {
+  // isExtensible 是否可以添加新属性
   return value[ReactiveFlags.SKIP] || !Object.isExtensible(value)
     ? TargetType.INVALID
     : targetTypeMap(toRawType(value))
@@ -257,8 +258,8 @@ export function shallowReadonly<T extends object>(target: T): Readonly<T> {
 function createReactiveObject(
   target: Target,
   isReadonly: boolean,
-  baseHandlers: ProxyHandler<any>,
-  collectionHandlers: ProxyHandler<any>,
+  baseHandlers: ProxyHandler<any>,// Object Array 处理Handles
+  collectionHandlers: ProxyHandler<any>,// Map Set WeakMap WeakSet 处理Handles
   proxyMap: WeakMap<Target, any>,
 ) {
   if (!isObject(target)) {
@@ -279,12 +280,12 @@ function createReactiveObject(
   ) {
     return target
   }
-  // only specific value types can be observed.
+  // only specific value types can be observed. Proxy  合法的类型  Object Array Map Set WeakMap WeakSet
   const targetType = getTargetType(target)
   if (targetType === TargetType.INVALID) {
     return target
   }
-  // target already has corresponding Proxy
+  // target already has corresponding 
   const existingProxy = proxyMap.get(target)
   if (existingProxy) {
     return existingProxy
@@ -293,6 +294,7 @@ function createReactiveObject(
     target,
     targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers,
   )
+  // 标记该对象已经被创建为 Proxy
   proxyMap.set(target, proxy)
   return proxy
 }

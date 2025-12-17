@@ -13,7 +13,7 @@ export enum TriggerOpTypes {
   DELETE = 'delete',
   CLEAR = 'clear',
 }
-
+// 响应式数据的标记
 export enum ReactiveFlags {
   SKIP = '__v_skip',
   IS_REACTIVE = '__v_isReactive',

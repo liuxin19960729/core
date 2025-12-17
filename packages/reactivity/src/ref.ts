@@ -98,7 +98,7 @@ export function shallowRef(value?: unknown) {
 }
 
 function createRef(rawValue: unknown, shallow: boolean) {
-  if (isRef(rawValue)) {
+  if (isRef(rawValue)) {// 当前对象已经是Ref
     return rawValue
   }
   return new RefImpl(rawValue, shallow)

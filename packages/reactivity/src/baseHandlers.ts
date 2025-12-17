@@ -52,6 +52,13 @@ class BaseReactiveHandler implements ProxyHandler<Target> {
     protected readonly _isShallow = false,
   ) {}
 
+  /**
+   * 拦截对象的读取属性操作
+   * @param target 目标对象
+   * @param key 被获取的属性名
+   * @param receiver Proxy 或者继承 Proxy 的对象
+   * @returns 
+   */
   get(target: Target, key: string | symbol, receiver: object): any {
     if (key === ReactiveFlags.SKIP) return target[ReactiveFlags.SKIP]
 
@@ -96,6 +103,7 @@ class BaseReactiveHandler implements ProxyHandler<Target> {
       }
     }
 
+    // Reflect.get()  receiver 如果  target 是一个getter 函数  里面的this 绑定成receiver
     const res = Reflect.get(
       target,
       key,
@@ -248,6 +256,7 @@ class ReadonlyReactiveHandler extends BaseReactiveHandler {
   }
 }
 
+/**可变处理函数 */
 export const mutableHandlers: ProxyHandler<object> =
   /*@__PURE__*/ new MutableReactiveHandler()
 
