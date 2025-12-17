@@ -15,6 +15,7 @@ import {
  * Incremented every time a reactive change happens
  * This is used to give computed a fast path to avoid re-compute when nothing
  * has changed.
+ * 每当发生响应式试变更时递增 编码没有内容改变的时候重复计算
  */
 export let globalVersion = 0
 
@@ -23,6 +24,9 @@ export let globalVersion = 0
  * Deps and subs have a many-to-many relationship - each link between a
  * dep and a sub is represented by a Link instance.
  *
+ * Dep 和  Effect 和  Effect 之间的连接
+ * 
+ * 
  * A Link is also a node in two doubly-linked lists - one for the associated
  * sub to track all its deps, and one for the associated dep to track all its
  * subs.
@@ -40,6 +44,10 @@ export class Link {
 
   /**
    * Pointers for doubly-linked lists
+   * 
+   * 双链表  
+   * 1 关联子项来跟踪所有依赖项
+   * 2.关联依赖项来跟踪其所有子项
    */
   nextDep?: Link
   prevDep?: Link
@@ -105,6 +113,7 @@ export class Dep {
     }
   }
 
+  /**依赖收集 */
   track(debugInfo?: DebuggerEventExtraInfo): Link | undefined {
     if (!activeSub || !shouldTrack || activeSub === this.computed) {
       return
@@ -286,6 +295,8 @@ export function track(target: object, type: TrackOpTypes, key: unknown): void {
 /**
  * Finds all deps associated with the target (or a specific property) and
  * triggers the effects stored within.
+ * 找出与目标（或特定属性）相关的所有依赖项，并 触发其中所存储的效果。
+ * 
  *
  * @param target - The reactive object.
  * @param type - Defines the type of the operation that needs to trigger effects.
@@ -395,3 +406,12 @@ export function getDepFromReactive(
   const depMap = targetMap.get(object)
   return depMap && depMap.get(key)
 }
+/**
+ * dep 依赖系统
+ * 作用:
+ * 1.收集依赖
+ * 2.触发更新
+ * 
+ * 
+ * 
+ */

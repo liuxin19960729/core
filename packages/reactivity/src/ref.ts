@@ -112,12 +112,15 @@ class RefImpl<T = any> {
   private _rawValue: T
 
   dep: Dep = new Dep()
-
+  // ref 对象
   public readonly [ReactiveFlags.IS_REF] = true
+  // 是否是浅层次的响应式
   public readonly [ReactiveFlags.IS_SHALLOW]: boolean = false
 
   constructor(value: T, isShallow: boolean) {
+    // toRaw 将一个代理对象返回成原始对象
     this._rawValue = isShallow ? value : toRaw(value)
+    // isShallow true  value 是对象转换成响应式对象
     this._value = isShallow ? value : toReactive(value)
     this[ReactiveFlags.IS_SHALLOW] = isShallow
   }

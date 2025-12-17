@@ -378,6 +378,8 @@ export function isProxy(value: any): boolean {
  * @see {@link https://vuejs.org/api/reactivity-advanced.html#toraw}
  */
 export function toRaw<T>(observed: T): T {
+  // value1 && value2 规则  value1 假  or value2 假 返回  value1 
+  // value1 && value2 同为真返回 value2
   const raw = observed && (observed as Target)[ReactiveFlags.RAW]
   return raw ? toRaw(raw) : observed
 }

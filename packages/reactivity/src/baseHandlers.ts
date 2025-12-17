@@ -147,6 +147,7 @@ class MutableReactiveHandler extends BaseReactiveHandler {
     super(false, isShallow)
   }
 
+  /**设置值的捕获器 */
   set(
     target: Record<string | symbol, unknown>,
     key: string | symbol,

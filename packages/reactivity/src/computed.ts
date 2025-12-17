@@ -118,9 +118,10 @@ export class ComputedRefImpl<T = any> implements Subscriber {
     this.flags |= EffectFlags.DIRTY
     if (
       !(this.flags & EffectFlags.NOTIFIED) &&
-      // avoid infinite self recursion
+      // avoid infinite self recursion 避免无限自我递归
       activeSub !== this
     ) {
+      // effect 和 flags EffectFlags.NOTIFIED 状态设置
       batch(this, true)
       return true
     } else if (__DEV__) {
@@ -186,10 +187,12 @@ export class ComputedRefImpl<T = any> implements Subscriber {
  * @param debugOptions - For debugging. See {@link https://vuejs.org/guide/extras/reactivity-in-depth.html#computed-debugging}.
  * @see {@link https://vuejs.org/api/reactivity-core.html#computed}
  */
+/**只读的计算属性 */
 export function computed<T>(
   getter: ComputedGetter<T>,
   debugOptions?: DebuggerOptions,
 ): ComputedRef<T>
+/**可写的计算属性 */
 export function computed<T, S = T>(
   options: WritableComputedOptions<T, S>,
   debugOptions?: DebuggerOptions,

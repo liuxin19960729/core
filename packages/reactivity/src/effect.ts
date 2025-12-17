@@ -238,8 +238,10 @@ let batchedSub: Subscriber | undefined
 let batchedComputed: Subscriber | undefined
 
 export function batch(sub: Subscriber, isComputed = false): void {
+  // 设置未已经通知的状态
   sub.flags |= EffectFlags.NOTIFIED
   if (isComputed) {
+    // 计算属性
     sub.next = batchedComputed
     batchedComputed = sub
     return
