@@ -301,10 +301,10 @@ export function endBatch(): void {
 }
 
 function prepareDeps(sub: Subscriber) {
-  // Prepare deps for tracking, starting from the head
+  // Prepare deps for tracking, starting from the head 从开头的地方跟踪的依赖项目
   for (let link = sub.deps; link; link = link.nextDep) {
-    // set all previous deps' (if any) version to -1 so that we can track
-    // which ones are unused after the run
+    // set all previous deps' (if any) version to -1 so that we can track 将所有version 修改未 -1 让我们更加好的追踪那些依赖未被使用
+    // which ones are unused after the run 
     link.version = -1
     // store previous active sub if link was being used in another context
     link.prevActiveLink = link.dep.activeLink
@@ -319,6 +319,7 @@ function cleanupDeps(sub: Subscriber) {
   let link = tail
   while (link) {
     const prev = link.prevDep
+    // link.version === -1 表示没有依赖关系
     if (link.version === -1) {
       if (link === tail) tail = prev
       // unused - remove it from the dep's subscribing effect list
@@ -404,7 +405,9 @@ export function refreshComputed(computed: ComputedRefImpl): undefined {
   try {
     prepareDeps(computed)
     const value = computed.fn(computed._value)
+    // 依赖修改  or 值发生了改变
     if (dep.version === 0 || hasChanged(value, computed._value)) {
+      // 值设置未被修改状态
       computed.flags |= EffectFlags.EVALUATED
       computed._value = value
       dep.version++
